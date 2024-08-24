@@ -30,7 +30,9 @@ Distintos dispositivos se pueden conectar a la internet de distintas maneras:
 
 ## Modelo TCP/IP
 
-El modelo TCP/IP es un modelo de capas que se utiliza para la comunicación en la internet. Está compuesto por 5 capas:
+El modelo TCP/IP es un modelo de capas que se utiliza para la comunicación en la internet. Está compuesto por 5 capas.
+
+Teóricamente las capas deberían estar aisladas y no depender unas de otras. En la práctica esto no es así.
 
 ### Capa Aplicación
 
@@ -46,9 +48,13 @@ Finalmente una vez descubrimos la dirección IP del servidor que queremos contac
 
 Es la encargada de armar los paquetes de información que se van a enviar. Aquí se encuentran los protocolos TCP y UDP. TCP es un protocolo orientado a la conexión y garantiza la entrega de los paquetes. UDP es un protocolo no orientado a la conexión y no garantiza la entrega de los paquetes, pero que tiene una ventaja en la velocidad de envío.
 
+Se encarga de multiplexar y demultiplexar los paquetes de información.
+
 ### Capa Red
 
 Es el encargado de direccionar los paquetes de información. Aquí se encuentra el protocolo IP que se encarga de asignar una dirección IP a un dispositivo. Además se encuentra el protocolo ICMP que se encarga de enviar mensajes de error y control.
+
+Ocurre entre 2 dispositivos, 2 nodos, una computadora con un router, 2 routers, etc.
 
 ### Capa Enlace
 
@@ -66,10 +72,9 @@ Aquí se encuenta el hardware que se encarga de enviar los paquetes de informaci
 
 Es una medida que mide cuanto tiempo tarda un paquete de información en llegar de un punto a otro. Se mide en milisegundos. Esta puede tener distintas causas:
 
-- **delay de inserción**: Tiempo que tarda un router en encolar un paquete. Este se calcula como L/R donde L es el tamaño del paquete y R es la velocidad de serialización del router.
-- **delay de procesamiento**: Tiempo que tarda un router en procesar un paquete y decidir a donde enviarlo. Tarda del orden de los microsegundos o nanosegundos.
-- **delay de encolamiento**: Tiempo que espera un paquete en la cola del router.
-- **delay de transmisión**: Tiempo que tarda en ser enviado del router al medio físico.
+- **delay de inserción/transmición**: Tiempo que tarda un router en encolar un paquete. Este se calcula como L/R donde L es el tamaño del paquete y R es la velocidad de serialización del router.
+- **delay de procesamiento**: Tiempo que tarda un router en procesar un paquete y decidir a donde enviarlo. Tarda del orden de los nanosegundos.
+- **delay de encolamiento/buffer**: Tiempo que espera un paquete en la cola del router. Se calcula como kL/$\lambda$ donde k es la longitud de la cola (una cte) y $\lambda$ es la tasa de encolamiento. Peeeero, no podemos calcularlos porque no sabemos el tráfico instantáneo de la red.
 - **delay de propagación**: Tiempo que tarda un paquete en llegar de un punto a otro. Se calcula como D/S donde D es la distancia entre los dos puntos y S es la velocidad de propagación de la señal, por ejemplo la velocidad en la fibra óptica es de aproximadamente 2/3 de la velocidad de la luz (c).
 
 Esta métricas es importante para aplicaciones en tiempo real como videollamadas, juegos online, etc.
@@ -136,3 +141,37 @@ L4:
 - Distancia: 100m
 - Ancho de banda: 10Mbps
 - Velocidad de propagación: 1.7 x 10^5 km/s
+
+Calculemos el RTT para un paquete de 1000 Bytes.
+
+$$RTT = 2 * (dtL_1 + dtL_2 + dtL_3 + dtL_4 + dpL_1 + dpL_2 + dpL_3 + dpL_4)$$
+
+- dp = delay de propagación
+- dt = delay de transmisión
+- L = enlace
+- T = tamaño del paquete
+- V = velocidad del enlace
+
+$$dtL_i = T / V_i$$
+
+$$dtL_1 = 1000B / 10Mbps = 8 x 10^3 bits / 10^7 bits/s = 8 x 10^-4 s = 0,8 ms$$
+
+$$dtL_2 = 1000B / 200Mbps = 8 x 10^3 bits / 2 x 10^8 bits/s = 4 x 10^-5 s = 0,04 ms$$
+
+$$dtL_3 = 1000B / 200Mbps = 8 x 10^3 bits / 2 x 10^8 bits/s = 4 x 10^-5 s = 0,04 ms$$
+
+$$dtL_4 = 1000B / 10Mbps = 8 x 10^3 bits / 10^7 bits/s = 8 x 10^-4 s = 0,8 ms$$
+
+$$dpL_i = D_i/S_i$$
+
+$dpL_1 = 100m / (1.7 x 10^5 km/s) = (1,00 x 10^2 m) / (1.7 x 10^8 m/s) = 0,59 x 10^-6 s = 0,59 µs$
+
+$dpL_2 = 10km / (2 x 10^5 km/s) = (1,00 x 10^4 m) / (2 x 10^8 m/s) = 0,5 x 10^-4 s = 0,05 ms$
+
+$dpL_3 = 4km / (2 x 10^5 km/s) = (4,00 x 10^3 m) / (2 x 10^8 m/s) = 2 x 10^-5 s = 0,02 ms$
+
+$dpL_4 = 100m / (1.7 x 10^5 km/s) = (1,00 x 10^2 m) / (1.7 x 10^8 m/s) = 0,59 x 10^-6 s = 0,59 µs$
+
+$$RTT = 2 * (0,59µs + 0,05ms + 0,02ms + 0,59µs + 0,8ms + 0,04ms + 0,04ms + 0,8ms) = 2 * 1.75ms = 3,5ms$$
+
+RTT = 3,5ms
