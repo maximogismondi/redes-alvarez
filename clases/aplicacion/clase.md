@@ -33,19 +33,40 @@ Para comunicar 2 procesos podemos ultizar sockets.
 
 ## Protocolos
 
+### X.25
+
+Es un protocolo muy primitivo que se utilizaba para la conmutación de paquetes. Se utilizaba para la transmisión de datos en redes de conmutación de paquetes. Este no solo se implementaba a nivel de software sino que también a nivel de hardware.
+
+Hoy en día los protocolos de aplicaciones se implementan a nivel de software.
+
 ### HTTP
 
 HyperText Transfer Protocol. Fue creado por unos investigadores del CERN que vino a reemplazar a Gopher que solo permitía texto plano.
 
 Es un protocolo que utiliza el modelo cliente-servidor. Primeramente las peticiones eran NO persistentes, es decir, se abría una conexión, se enviaba la petición y se cerraba la conexión. Luego se creó el concepto de conexión persistente, donde se podía enviar varias peticiones en una misma conexión para evitar el overhead de abrir y cerrar conexiones.
 
-Permite el texto formateado, imagenes, videos, etc.
+Permite el texto formateado, imagenes, videos, etc. Se podría decir que es un protocolo de archivos.
 
 Permitía cachear los recursos para evitar la sobrecarga de los servidores.
 
 Los puertos más comunes se llaman "well known ports" y son el 80 para HTTP y el 443 para HTTPS por ejemplo.
 
 Por defecto el HTTP 1.0 es NO persistente y el HTTP 1.1 es persistente. Se le puede indicar al servidor que cierre la conexión con la cabecera `Connection: close`.
+
+La estructura de un mensaje HTTP es:
+
+![estructura HTTP](http-request.png)
+
+Con **telnet** podemos conectarnos de forma remota a un servidor y usarlo como terminal, haciendo por ejemplo peticiones HTTP. Normalmente esto ya no se deja abierto ya que todo el tráfico viaja en texto plano y esto es inseguro.
+
+```bash
+telnet www.google.com 80
+
+GET / HTTP/1.1
+Host: www.google.com
+```
+
+Por esto mismo se utiliza `SSH` que es un protocolo seguro que permite conectarse a un servidor de forma remota y encriptada.
 
 ### DNS
 
