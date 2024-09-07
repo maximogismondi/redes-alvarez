@@ -1,0 +1,100 @@
+
+; <<>> DiG 9.18.28-0ubuntu0.22.04.1-Ubuntu <<>> @8.8.8.8 developer.mozilla.org A +authority +trace +stats +multiline
+; (1 server found)
+;; global options: +cmd
+.			87203 IN NS e.root-servers.net.
+.			87203 IN NS d.root-servers.net.
+.			87203 IN NS c.root-servers.net.
+.			87203 IN NS b.root-servers.net.
+.			87203 IN NS j.root-servers.net.
+.			87203 IN NS f.root-servers.net.
+.			87203 IN NS l.root-servers.net.
+.			87203 IN NS h.root-servers.net.
+.			87203 IN NS k.root-servers.net.
+.			87203 IN NS m.root-servers.net.
+.			87203 IN NS i.root-servers.net.
+.			87203 IN NS g.root-servers.net.
+.			87203 IN NS a.root-servers.net.
+.			87203 IN RRSIG NS 8 0 518400 (
+				20240920050000 20240907040000 20038 .
+				U49XcWjPsd5CGorijfDO33h3G+/3Nd2svHCIx6OKUzrk
+				46UMIU3B9PbmOs/YCAUVvmD7gj4ZqOk+rXdGEUcysddn
+				/oMRtNtIeNe92RwerClE8cUY3Klzulx3rlDghB5W7VlX
+				3sy0l0U7XuA7alSrHmB3tNWQzvXzErbMudKsOW+utzfQ
+				1nYYGBDolFrezaxm+sjHW1/+Mju5sXy5oXACr1ifq9TN
+				uFCHfw6UcEW+wXd6MRjGfSdBPod5/bVgMg0hmbpVZ3gB
+				u5eqwdBWpBRHQs+GuYlzh6PtJg7Z3W/6ZuCHd4YmoyBv
+				W8Wm2ydUmbVSjiFeL9C6u9Ig2TFk/E10tQ== )
+;; Query time: 49 msec
+;; SERVER: 8.8.8.8#53(8.8.8.8) (UDP)
+;; WHEN: Sat Sep 07 12:02:13 -03 2024
+;; MSG SIZE  rcvd: 525
+
+;; UDP setup with 2001:500:2::c#53(2001:500:2::c) for developer.mozilla.org failed: network unreachable.
+;; no servers could be reached
+
+;; UDP setup with 2001:500:2::c#53(2001:500:2::c) for developer.mozilla.org failed: network unreachable.
+;; no servers could be reached
+
+;; UDP setup with 2001:500:2::c#53(2001:500:2::c) for developer.mozilla.org failed: network unreachable.
+;; UDP setup with 2001:7fe::53#53(2001:7fe::53) for developer.mozilla.org failed: network unreachable.
+;; UDP setup with 2001:500:2f::f#53(2001:500:2f::f) for developer.mozilla.org failed: network unreachable.
+;; UDP setup with 2801:1b8:10::b#53(2801:1b8:10::b) for developer.mozilla.org failed: network unreachable.
+org.			172800 IN NS c0.org.afilias-nst.info.
+org.			172800 IN NS a2.org.afilias-nst.info.
+org.			172800 IN NS a0.org.afilias-nst.info.
+org.			172800 IN NS b0.org.afilias-nst.org.
+org.			172800 IN NS b2.org.afilias-nst.org.
+org.			172800 IN NS d0.org.afilias-nst.org.
+org.			86400 IN DS 26974 8 2 (
+				4FEDE294C53F438A158C41D39489CD78A86BEB0D8A0A
+				EAFF14745C0D16E1DE32 )
+org.			86400 IN RRSIG DS 8 1 86400 (
+				20240920050000 20240907040000 20038 .
+				nw5DAysKQIL8XsOuznoeNjl6xG08XqPtWQID/ZeS5T8j
+				5xgASM2QuykM9OCNpRY2EPq++5UrkNHxK3g8YIjkezbp
+				JDJ+i7U1HGQINoEsh9VX0y0jsX0oKYkoAmfOl5SjIfx2
+				ARiHW2h7gTvnRtEihLV23mpJaiaDPAxRdE5MEKmkmKEk
+				3l/jR7T3bvuL9FYcCnXCvK6IQpy1yeCUBGGb8+fr9Xbj
+				RYdBmeVrql8EDQCXo25SfkTgIN/deQy+bIYZl0pY7iMH
+				epood2sZB/NeqPaUvbG4WROUCxgfjue+oos0oZTJT1TA
+				wpuUMGWHne8Ju6qm/8vsxRU19UukFAXTQA== )
+;; Query time: 199 msec
+;; SERVER: 192.33.4.12#53(c.root-servers.net) (UDP)
+;; WHEN: Sat Sep 07 12:02:14 -03 2024
+;; MSG SIZE  rcvd: 821
+
+;; UDP setup with 2001:500:48::1#53(2001:500:48::1) for developer.mozilla.org failed: network unreachable.
+mozilla.org.		3600 IN	NS ns5-65.akam.net.
+mozilla.org.		3600 IN	NS ns1-240.akam.net.
+mozilla.org.		3600 IN	NS ns4-64.akam.net.
+mozilla.org.		3600 IN	NS ns7-66.akam.net.
+gdtpongmpok61u9lvnipqor8lra9l4t0.org. 3600 IN NSEC3 1 1 0 332539EE7F95C32A (
+				GDTREA8KMJ2RNEQEN4M2OGJ26KFSUKJ7
+				NS SOA RRSIG DNSKEY NSEC3PARAM )
+gdtpongmpok61u9lvnipqor8lra9l4t0.org. 3600 IN RRSIG NSEC3 8 2 3600 (
+				20240928145910 20240907135910 23064 org.
+				I5cDzIhUVvmKTTvMPOJo9T9FZFFHMNox+/darSLA0J9x
+				sL2GWO27nDUxqbU7NX0cHk/2RaMxQdsxyYByGFjia5Od
+				rTJ+M+JcHxsLULh1KzDtX4aCeAbqZ/eMh2z0ZVCKFmh7
+				STaQgHc0YVar9ZsG1ddxKXeyxKeHyu0F/628dTw= )
+8vlo360qgah014avpms0di1hfbruv4og.org. 3600 IN NSEC3 1 1 0 332539EE7F95C32A (
+				8VLPUIUF52ALQPH5HBEKT8INHBUTHQ6D
+				NS DS RRSIG )
+8vlo360qgah014avpms0di1hfbruv4og.org. 3600 IN RRSIG NSEC3 8 2 3600 (
+				20240922152148 20240901142148 23064 org.
+				bvG4tGubA3vbpMV1SwaQq6AXYfcSa9tuhRNOeZoVyuvV
+				iJQmbe4k+30dpU3wJ89DIUd7H+xnxis2Q4kLqdfudv2y
+				lJesXB3eqrlI88rjnKzkidPPEJ/IDityXU/NIcuQ86nA
+				WkbD0SHi1i3HsNOnlcsElSqT7hYr4hUr76+8zm0= )
+;; Query time: 49 msec
+;; SERVER: 199.19.56.1#53(a0.org.afilias-nst.info) (UDP)
+;; WHEN: Sat Sep 07 12:02:14 -03 2024
+;; MSG SIZE  rcvd: 644
+
+developer.mozilla.org.	60 IN CNAME mdn.prod.mdn.prod.webservices.mozgcp.net.
+;; Query time: 179 msec
+;; SERVER: 84.53.139.64#53(ns4-64.akam.net) (UDP)
+;; WHEN: Sat Sep 07 12:02:14 -03 2024
+;; MSG SIZE  rcvd: 104
+
