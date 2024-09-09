@@ -1,5 +1,5 @@
 
-; <<>> DiG 9.18.28-0ubuntu0.22.04.1-Ubuntu <<>> @8.8.8.8 developer.mozilla.org A +authority +trace +stats +multiline
+; <<>> DiG 9.18.28-0ubuntu0.22.04.1-Ubuntu <<>> @8.8.8.8 developer.mozilla.org A +trace +stats +multiline
 ; (1 server found)
 ;; global options: +cmd
 .			87203 IN NS e.root-servers.net.
