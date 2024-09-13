@@ -32,6 +32,29 @@ Esto nos permite tener múltiples conexiones entre dos dispositivos. Es decir qu
 
 Los puertos más comunes llamados "well known ports" se exitenden desde el 0 al 1023. Los puertos del 1024 al 49151 son llamados "registered ports" y los puertos del 49152 al 65535 son llamados "dynamic ports". Estos puertos especiales necesitan permisos de administrador para ser utilizados.
 
+### Sockets en linux
+
+En linux todo es un archivo y los sockets no son la excepción. Se pueden manipular vía file descriptors como si fueran archivos.
+
+Para crear un socket, usamos las librerías estandar de C o cualquier wrapper en cualquier otro lenguaje. En C, las funciones básicas para crear un socket son:
+
+- **socket(family, type)**: Crea un socket
+
+Operaciones básicas para UDP:
+
+- **socket.bind(address)**: Asocia un socket a una dirección IP y un puerto
+- **socket.send_to(data, address)**: Envía datos a una dirección IP y un puerto
+- **socket.recv_from(buffer_size)**: Recibe datos de una dirección IP y un puerto
+
+Estas funciones son elemntales para UDP ya que no hay que establecer una conexión. Para TCP se deben agregar las siguientes funciones:
+
+- **socket.connect(address)**: Establece una conexión con una dirección IP y un puerto
+- **socket.listen()**: Pone al socket en modo de escucha
+- **socket.accept()**: Acepta una conexión entrante
+- **socket.send(data)**: Envía datos
+- **socket.recv(buffer_size)**: Recibe datos
+- **socket.close()**: Cierra el socket
+
 ## Comunicaciones fiables
 
 Para que una comunicación sea fiable se necesita:
@@ -175,8 +198,9 @@ cwin(0) = 1 MSS
 sstresh = 65535 bytes (numero mágico)
 
 Donde:
+
 - cwin es el tamaño de la ventana de congestión
-- sstresh es el umbral de la ventana de congestión
+- sstresh es el "slow start treshold" umbral de la ventana de congestión
 - MSS es el tamaño máximo de los segmentos
 ```
 
@@ -194,7 +218,12 @@ Si perdemos paquetes dependeiendo del algoritmo que usemos, se reduce el cwin y 
 - TCP Reno:
 
 ```text
-cwin(i) = cwin(i-1) / 2
+Cuando hay un triple ACK (Fast recovery):
+cwin(i) = cwin(i-1) / 2 + 3 MSS
+sstresh = cwin(i) / 2 + 3 MSS
+
+Cuando hay un timeout:
+cwin(i) = 1 MSS
 sstresh = cwin(i) / 2
 ```
 
