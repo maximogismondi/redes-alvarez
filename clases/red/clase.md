@@ -97,6 +97,8 @@ Este es un problema que tenemos cuando muchos paquetes quieren salir por la mism
 
 Cada router lo resuelve de manera diferente, pero normalmente se hace una cola de paquetes en la salida y se van enviando de a uno.
 
+Estas colas pueden ser FIFO, pueden ser RR o pueden ser por prioridad. La idea es que no haya perdidas ni starvations.
+
 ## Datagramas IP
 
 El datagrama IP es el átomo a nivel de red. Es el paquete que se envía a través de la red. Este paquete esta compuesto por:
@@ -133,3 +135,5 @@ No es una buena idea hacerlo ya que genera más problemas que soluciones. Por lo
 Si de casualidad se pierde un fragmento, se pierde todo el paquete.
 
 Si el paquete es muy grande y NO se puede fragmentar, se envía un mensaje ICMP de tipo 3 código 4 (Destination Unreachable, Fragmentation Needed and Don't Fragment was Set).
+
+La fragmentación se debe hacer en múltiplos de 8 bytes. Ya que el offset se mide en múltiplos de 8 bytes.
