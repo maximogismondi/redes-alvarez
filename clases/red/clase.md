@@ -137,3 +137,53 @@ Si de casualidad se pierde un fragmento, se pierde todo el paquete.
 Si el paquete es muy grande y NO se puede fragmentar, se envía un mensaje ICMP de tipo 3 código 4 (Destination Unreachable, Fragmentation Needed and Don't Fragment was Set).
 
 La fragmentación se debe hacer en múltiplos de 8 bytes. Ya que el offset se mide en múltiplos de 8 bytes.
+
+## Plano de control
+
+El plano de control se encarga de tomar decisiones sobre la ruta que deben seguir los paquetes. Para esto se utilizan los protocolos de ruteo.
+
+El plano tiene distintas características:
+
+- **Dinámico**: Se actualiza constantemente.
+- **Estático**: No se actualiza. Es útil para redes pequeñas como las domésticas ya que todo lo que se recibe desde internet se envía a la red interna y todo lo que se recibe de la red interna se envía a internet.
+- **Distribuido**: No necesita un ente centralizado que controle todo. Sino que los routers se comunican entre ellos para actualizar sus tablas de routing. Para ello deben hablar mediante un protocolo especial (normalmente de capa de aplicación) que corre sobre IP.
+- **Centralizado**: Existe un ente centralizado que controla y decide por donde irán los paquetes. Es útil para redes pequeñas ya que a medida que crece la red se vuelve y muy frágil.
+- **Dependientes del trafico**: Se actualizan en base al tráfico de la red. Esto significa que no solo reaccionan a la topología de la red, sino que también a la congestión de la misma, con el fin de balancear la carga.
+
+Los routers domésticos suelen ser polifuncionales, ya que no solo hacen routing sino que también hacen NAT, firewall, DHCP, etc.. Normalmente se utilizan protocolos de ruteo estáticos ya que no es necesario un protocolo de ruteo dinámico para redes simples.
+
+Para el mismo flujo de datos (misma protocolo de transporte, IP origen y destino y mismo puerto origen y destino) se suele utilizar el mismo camino. Es decir se evita hacer balanceo de carga para el mismo flujo de datos.
+
+No así para distintos flujos de datos, donde 2 caminos de mismo o similar costo se pueden alternar para balancear la carga de los distintos flujos de datos.
+
+### Topología de red
+
+- AS (Autonomous System): Red autónoma que tiene un único protocolo de ruteo. Se identifican con un número de 16 bits.
+- ISP (Internet Service Provider): Proveedores de servicios de internet. Son AS.
+
+Jerarquía de AS:
+
+- **Tier 1**: No pagan a nadie por el tráfico que envían. Se conectan a todos los demás Tier 1.
+- **Tier 2**: Pagan a los Tier 1 por el tráfico que envían. Se conectan a los Tier 1 y a otros Tier 2.
+- **Tier 3**: Pagan a los Tier 2 por el tráfico que envían. Se conectan a los Tier 2 y a otros Tier 3.
+- **Stubs**: Se conectan a los Tier 3 y son aquellos que proveen servicios a los usuarios finales.
+
+Los nodos de la red, se conectan a más de un router para mantener la alta disponibilidad. Por lo que se pueden tener múltiples caminos para llegar a un destino.
+
+A su vez, si el trafico es similar entre 2 nodos de la misma jerarquía, se puede hacer una conexión P2P entre ellos para evitar el costo de pasar por nodos de jerarquía superior.
+
+De la misma manera, existen unos nodos de la red llamados IXP (Internet Exchange Point) que son puntos de intercambio de tráfico entre distintos AS mantenidos entre todos los AS que se conectan a él ahorrando costos para subir a jerarquías superiores.
+
+El hecho de subir en la jerarquía de AS implica un costo y se conoce como "uphill" y el hecho de bajar en la jerarquía también implica un costo para el consumidor final y se conoce como "downhill".
+
+Los CDNs también son parte de la topología de red por el tráfico que manejan y se los suele ubicar en los puntos más altos de la jerarquía de AS.
+
+### Algortimos de ruteo
+
+- **Distance Vector**: Se basa en la distancia y la dirección. Se actualiza cada cierto tiempo y se envía a todos los vecinos. Se utiliza el algoritmo de Bellman-Ford. Este es un algoritmo puramente distribuido ya que no necesita conocer la topología de la red para calcular las rutas más cortas. El problema es que no simpre converge y puede generar loops muy grandes ante cambios o desconexiones en la red.
+- **Link State**: Se basa en el estado de los enlaces. Se actualiza cada vez que hay un cambio en la red y se envía a todos los routers. Se utiliza el algoritmo de Dijkstra. Este algoritmo es más eficiente que el de distancia vector ya que converge siempre y no genera loops. El problema es que necesita conocer la topología de la red para calcular las rutas más cortas y esto muchas veces implica un alto costo en envío de mensajes y por ende en la congestión de la red. Este algoritmo si bien es disribuido ya que se ejecuta en cada router, necesita centralizar la información para calcular las rutas más cortas. Además ante un pequño cambio en la red, se deben recalcular las rutas para volver a llegar a un estado óptimo.
+
+### Protocolos de ruteo
+
+- **RIP (Routing Information Protocol)**: Protocolo de ruteo de distancia vector. Se utiliza el algoritmo de Bellman-Ford. Se actualiza cada 30 segundos y se envía a todos los vecinos. Se utiliza el puerto 520. Se utiliza en redes pequeñas ya que no escala tan bien. Cuenta con autenticación.
+- **OSPF (Open Shortest Path First)**: Protocolo de ruteo de estado de enlaces. Se utiliza el algoritmo de Dijkstra. Se actualiza cada vez que hay un cambio en la red y se envía a todos los routers. Se utiliza el puerto 89. Se utiliza en redes grandes ya que escala muy bien. Lo que se suele hacer para que el $N$ siendo este el número de routers no sea tán grande a la hora de calcular las rutas es dividir la red en áreas y calcular las rutas por áreas. Esto se llama OSPF jerárquico. Cuenta con autenticación.
