@@ -180,10 +180,101 @@ Los CDNs también son parte de la topología de red por el tráfico que manejan 
 
 ### Algortimos de ruteo
 
-- **Distance Vector**: Se basa en la distancia y la dirección. Se actualiza cada cierto tiempo y se envía a todos los vecinos. Se utiliza el algoritmo de Bellman-Ford. Este es un algoritmo puramente distribuido ya que no necesita conocer la topología de la red para calcular las rutas más cortas. El problema es que no simpre converge y puede generar loops muy grandes ante cambios o desconexiones en la red.
+- **Distance Vector**: Se basa en la distancia y la dirección. Se actualiza cada cierto tiempo y se envía a todos los vecinos. Se utiliza el algoritmo de Bellman-Ford. Este es un algoritmo puramente distribuido ya que no necesita conocer la topología de la red para calcular las rutas más cortas. El problema es que no simpre converge y puede generar loops muy grandes ante cambios o desconexiones en la red. Para evitar estos loops se puede extender la tabla de ruteo agregando los distintos saltos que se necesitan para llegar a un destino, si un router ve que se le informa una ruta más corta en la que el aparece como salto, la descarta. Este algoritmo requiere de un mensaje mucho más grande al incluir está información adicional.
 - **Link State**: Se basa en el estado de los enlaces. Se actualiza cada vez que hay un cambio en la red y se envía a todos los routers. Se utiliza el algoritmo de Dijkstra. Este algoritmo es más eficiente que el de distancia vector ya que converge siempre y no genera loops. El problema es que necesita conocer la topología de la red para calcular las rutas más cortas y esto muchas veces implica un alto costo en envío de mensajes y por ende en la congestión de la red. Este algoritmo si bien es disribuido ya que se ejecuta en cada router, necesita centralizar la información para calcular las rutas más cortas. Además ante un pequño cambio en la red, se deben recalcular las rutas para volver a llegar a un estado óptimo.
 
 ### Protocolos de ruteo
 
 - **RIP (Routing Information Protocol)**: Protocolo de ruteo de distancia vector. Se utiliza el algoritmo de Bellman-Ford. Se actualiza cada 30 segundos y se envía a todos los vecinos. Se utiliza el puerto 520. Se utiliza en redes pequeñas ya que no escala tan bien. Cuenta con autenticación.
 - **OSPF (Open Shortest Path First)**: Protocolo de ruteo de estado de enlaces. Se utiliza el algoritmo de Dijkstra. Se actualiza cada vez que hay un cambio en la red y se envía a todos los routers. Se utiliza el puerto 89. Se utiliza en redes grandes ya que escala muy bien. Lo que se suele hacer para que el $N$ siendo este el número de routers no sea tán grande a la hora de calcular las rutas es dividir la red en áreas y calcular las rutas por áreas. Esto se llama OSPF jerárquico. Cuenta con autenticación.
+
+## SDN (Software Defined Networking)
+
+Otra forma mucho más centralizada para gestionar la red es SDN. SDN permite a uno o varios administradores, controlar la red de manera centralizada. Esto implica que los SDN no están pensados para la interned en su totalidad sino para redes grandes y privadas que requieren de un control centralizado.
+
+Esta red permite separar de manera más abrupta el plano de control contra el plano de datos, quitandole la responsabilidad a los routers de comunicar su estado y delegando esta responsabilidad a un controlador centralizado. Para esto se desarolla hardware y software especializado que se comunica con los routers para controlar la red.
+
+Esto permite que la red sea programable y se hagan los reenvíos basados en las necesidades de la red y no en las necesidades de los routers. Estos renvíos pueden ser también basado en flujos (IP Origen, IP Destino, Puerto Origen, Puerto Destino, Protocolo) y no solo en la dirección IP de destino, lo cual permite establecer políticas de red más flexibles.
+
+El SDN consta de 3 partes:
+
+- **APP SDN**: Donde se comunica con las aplicaciones que definen las políticas de red.
+- **SDN Controller**: Donde se almacena la información de la red.
+- **Comunicación**: Donde se comunica con los routers.
+
+## BGP (Border Gateway Protocol)
+
+BGP es un protocolo de ruteo de estado de enlaces que se utiliza en la capa de red. Se utiliza para intercambiar información de ruteo entre distintos AS. Se utiliza el puerto 179.
+
+Este protocolo usa una idea similar a la de Distance Vector pero exitende el next hop con un AS Path. Esto permite que los routers no solo sepan por donde enviar los paquetes sino que también sepan por que redes pasaron los paquetes definiendo políticas de ruteo más complejas (términos comerciales, políticos, etc) y a su vez evitando loops descartando rutas que pasen por el mismo AS.
+
+A diferencia de las tablas normales de ruteo, las tablas de BGP no solo guardan la mejor ruta sino que guardan todas las rutas posibles (o algunas sub-óptimas) para usarlas en caso de que la mejor ruta falle o en casos que por políticas de ruteo se quiera enviar el tráfico por otro camino.
+
+En general BGP se usa para routers en el borde de las AS y no en routers internos.
+
+Adentro del sistema autónomo, la tabla tienen un último valor que es el de local preference que se utiliza para definir políticas de ruteo dentro del AS. Esto solo tiene sentido dentro del AS y debe ignorarse / sobreescribirse al recibir un mensaje BGP de otro AS.
+
+Hay una cosa que pueden hacer las redes autonomas, que es para caminos que no son deseados que se utilicen, se puede agregar a la lista de AS Path varias veces para evitar que se utilice ya que se considera un camino más largo.
+
+Para evitar que un AS externo use rutas por las que vos estás pagando, NO se transmiten las mismas a tiers AS pares o inferiores, para que no se aprovechen de tus rutas y eviten pagar por las suyas.
+
+## Tipos de comunicación
+
+### Comunicación unicast
+
+Es punto a punto, es decir, un host envía un paquete a otro host. Por ende, involucra tan solo a un socket.
+
+La velocidad de la red se mide en bps (bits por segundo).
+
+### Comunicación broadcast
+
+Es de uno a todos, es decir, un host envía un paquete a todos los hosts de la red.
+
+Llega información de funcionamiento de la red, como por ejemplo, la dirección IP de un host.
+
+### Comunicación multicast
+
+Es de uno a un grupo, es decir, un host envía un paquete a un grupo de hosts.
+
+Lleva información que sólo es necesaria para ese grupo.
+
+En la vida real, no existe la comunicación multicast ya que tiene muchas dificultades de implementación. Entre ellos constuir el árbol de tendido mínimo (o un intento) para llegar a todos los nodos del grupo.
+
+Termina siendo más simple hacer unicast a todos los nodos del grupo.
+
+### Comunicación anycast
+
+Es una comunicación al más cercano, es decir, un host envía un paquete al host más cercano.
+
+Un ejemplo de esto es el DNS, donde se envía la petición al servidor DNS más cercano donde existen tan solo 13 IPs de servidores DNS raíz pero muchas replicas de estos servidores en distintas partes del mundo.
+
+## ICMP (Internet Control Message Protocol)
+
+Es un protocolo de control de mensajes de internet. Se utiliza para enviar mensajes de error y control.
+
+Entre ellos se encuentran:
+
+Información
+
+- **Echo Request**: Se utiliza para hacer ping.
+- **Echo Reply**: Se utiliza para responder a un ping.
+- **Network information Request**: Se utiliza para pedir información de la red.
+- **Source Quench**: Se utiliza para indicar que el router está congestionado.
+- **Redirect**: Se utiliza para indicar que el router ha cambiado de camino.
+
+Errores
+
+- **Destination Host Unreachable**: Se utiliza para indicar que el host destino no es alcanzable.
+- **Destination Network Unreachable**: Se utiliza para indicar que la red destino no es alcanzable.
+- **Destination Port Unreachable**: Se utiliza para indicar que el puerto destino no es alcanzable.
+- **Can't Fragment**: Se utiliza para indicar que no se puede fragmentar el paquete (IPv4).
+- **Packet Too Big**: Se utiliza para indicar que el paquete es muy grande (IPv6).
+- **Packet corruption**: Se utiliza para indicar que el paquete está corrupto.
+- **Time Exceeded**: Se utiliza para indicar que el tiempo de vida del paquete ha expirado, Transit Time Exceeded cuando se llega al TTL y Fragment Reassembly Time Exceeded cuando se llega al tiempo límite de reensamblado.
+- **Parameter Problem**: Se utiliza para indicar que hay un problema con los parámetros del paquete.
+
+Este protocolo NO es uno de transporte, pero corre sobre IP. Por lo que no tiene puertos de origen y destino.
+
+Con este protocolo puedo implementar un traceroute, que es un comando que me permite ver los saltos que da un paquete para llegar a un destino.
+
+Hay un tipo de traceroute que es el traceroute de parís.
