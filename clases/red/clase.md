@@ -277,4 +277,4 @@ Este protocolo NO es uno de transporte, pero corre sobre IP. Por lo que no tiene
 
 Con este protocolo puedo implementar un traceroute, que es un comando que me permite ver los saltos que da un paquete para llegar a un destino.
 
-Hay un tipo de traceroute que es el traceroute de parís.
+Hay un tipo de traceroute que es el traceroute de parís. EXPLICAR
