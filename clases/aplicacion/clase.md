@@ -78,7 +78,7 @@ Además provee otros servicios:
 
 - **Host aliasing**: Un host puede tener varios nombres.
 - **Mail server aliasing**: Un host puede tener varios servidores de correo.
-- **Load distribution**: Se pueden tener varios servidores para un mismo nombre de dominio y se puede distribuir la carga entre ellos.
+- **Load distribution**: Se pueden tener varios servidores para un mismo nombre de dominio y se puede distr ibuir la carga entre ellos.
 - **Replicated servers**: Se pueden tener varios servidores con la misma información para evitar el punto único de falla.
 
 En la jeraquía de DNS tenemos:
